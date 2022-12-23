@@ -1,26 +1,19 @@
 $( document ).ready(function() {
-  let selected = [];
-  $(".amenities .popover li").on("input", function() {
-    let id = $(this).attr("data-id");
-    if ($(this).is(":checked")) {
-      selected.append(id);
+  let amen = {};
+  $('input[type="checkbox"]').change(function () {
+  if (this.checked) {
+    amen[$(this).data('id')] = ($(this).data('name'));
+  } else {
+    delete amen[($(this).data('id'))];
+  }
+  $('#h4_amenities').text(Object.keys(amen).map(function(k){return amen[k]}).join(", "));
+  });
+
+  $.get("http://127.0.0.1:5001/api/v1/status/", function(data) {
+    if (data.status === "OK") {
+      $("div#api_status").addClass("available");
     } else {
-      if selected.includes(id) {
-        let index = selected.indexOf(id);
-        array.splice(index, 1);
-      }
+      $("div#api_status").removeClass("available");
     }
   });
-  $(".amenities h4").text(selected.join(", "));
-
-  $.ajax({
-    url: "http://0.0.0.0:5001/api/v1/status/",
-    type: "GET",
-    .done(function() {
-      $("div#api_status").addClass("available");
-    })
-    .fail(function () {
-      $("div#api_status").removeClass("available");
-    })
-  })
 });
