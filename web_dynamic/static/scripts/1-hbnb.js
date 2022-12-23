@@ -1,15 +1,11 @@
 $( document ).ready(function() {
-  let selected = [];
-  $(".amenities .popover li").on("input", function() {
-    let id = $(this).attr("data-id");
-    if ($(this).is(":checked")) {
-      selected.append(id);
+  let amen = {};
+  $('input[type="checkbox"]').change(function () {
+    if (this.checked) {
+      amen[$(this).data('id')] = ($(this).data('name'));
     } else {
-      if selected.includes(id) {
-        let index = selected.indexOf(id);
-        array.splice(index, 1);
-      }
+      delete amen[($(this).data('id'))];
     }
+    $('#h4_amenities').text(Object.keys(amen).map(function(k){return amen[k]}).join(", "));
   });
-  $(".amenities h4").text(selected.join(", "))  
 });
